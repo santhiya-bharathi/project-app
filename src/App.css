@@ -2,37 +2,39 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.header-design{
+  height: 400px;
+  width: 150rem;
+  background:url("https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/ca16b009-6a59-47a1-b9dc-064647d7945f/d5hi55v-9230cf78-299f-4000-86a8-266a92ff55ef.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7InBhdGgiOiJcL2ZcL2NhMTZiMDA5LTZhNTktNDdhMS1iOWRjLTA2NDY0N2Q3OTQ1ZlwvZDVoaTU1di05MjMwY2Y3OC0yOTlmLTQwMDAtODZhOC0yNjZhOTJmZjU1ZWYuanBnIn1dXSwiYXVkIjpbInVybjpzZXJ2aWNlOmZpbGUuZG93bmxvYWQiXX0.3mp4vd8wlF22CSsjVe4RrXkevICCSQl4GJ18CiroK6w");
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.welcome{
+font-family: -webkit-pictograph;
+padding: 20px;
+letter-spacing: 3px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.welcome1{
+  font-family: -webkit-pictograph;
+  font-weight: 500;
+  padding: 5px;
+  letter-spacing: 1.5px;
+}
+.welcome2{
+  font-family: -webkit-pictograph;
+  font-weight: 500;
+  padding: 10px;
+  letter-spacing: 0.5px;
+}
+.footer-design{
+  height: 60px;
+  width: 100%;
+  background-color: black;
+  text-align: center;
+}
+.copyright{
   color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+  font-weight: 100;
+  font-size: large;
+  padding: 20px;
 }
