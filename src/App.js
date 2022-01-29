@@ -17,6 +17,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import EditIcon from '@mui/icons-material/Edit';
 
 
 function App() {
@@ -78,13 +79,7 @@ const INITIAL_BLOGS = [
   -Rainer Maria Rilke, Rilke’s Book of Hours: Love Poems to God`,heading:"Earth's intelligence: Being pulled toward the heart of the world", summary:"How surely gravity law, strong as an ocean current, takes hold of even the strongest thing and pulls it toward the heart of the world. Each thing- each stone, blossom, child – is held in place. Only we, in our arrogance, push out beyond what we belong to for some empty freedom. If we surrendered…"},
   {picture:"https://w0.peakpx.com/wallpaper/62/191/HD-wallpaper-superb-river-view-tree-mountains-river-sky-meadow.jpg", moredetails:`The world is animated by the wind. This invisible, mysterious force can bring a landscape alive. Its absence can cast a calm stillness over the earth. On barren mountain tops its power is barely perceptible; in forests and seas its presence becomes manifest.
 
-  Winds are wild, and sometimes destructive. When we look deeply into the nature of wind, when we reflect on its life, its journey to us, we can see the interconnected nature of all things. The light from the sun travels to the surface of the earth, where air is heated unevenly over land and sea causing it to expand and rise at different rates until this rising and displacing air builds in billowing gusts that rock the oceans and ripple the seas. The wind can make rag-dolls of trees, ripping them from their roots.
-  
-  The beauty of the wind is its dynamism. It is not constant, nor predictable. One minute it lifts the place; the next there is a lull of still abiding peace. On gentle days it is god’s whisper; In more rambunctious form it is a monster’s roar, a voice that erupts with a wild and angry energy.
-  
-  When it blows, the air tattoos the surface of canals, lakes, seas, blowing beautiful patterns of rhythmic energy into the liquid silence. Trees bow down in submission, as leaves, branches and roots, dance to its music, its mad, manic energy. Forests roll around in circles sending signals to the clouds, waving to the skies, and laughing to the stars above.
-  
-  When furious it blows blackened clouds across angry skies. The wind is a river and in its torrent clouds race each other seeking shelter, refuge from the howling ghosts of moving air.`,heading:"Connecting with nature: The practice of 'wind-watching'", summary:"The world is animated by the wind. This invisible, mysterious force can bring a landscape alive. Its absence can cast a calm stillness over the earth. On barren mountain tops its power is barely perceptible; in forests and seas its presence becomes manifest. Winds are wild, and sometimes destructive. When we look deeply into the…"},
+  Winds are wild, and sometimes destructive. The wind is a river and in its torrent clouds race each other seeking shelter, refuge from the howling ghosts of moving air.`,heading:"Connecting with nature: The practice of 'wind-watching'", summary:"The world is animated by the wind. This invisible, mysterious force can bring a landscape alive. Its absence can cast a calm stillness over the earth. On barren mountain tops its power is barely perceptible; in forests and seas its presence becomes manifest. Winds are wild, and sometimes destructive. When we look deeply into the…"},
   {picture:"https://c4.wallpaperflare.com/wallpaper/955/500/1010/tree-sun-light-summer-forest-wallpaper-preview.jpg", moredetails:`A sinking, uncomfortable feeling that I know all too well. It is the same feeling that comes on Sunday evenings as another week in the office beckons. The same feeling that comes when the long awaited annual two week holiday is almost over. I remember the exact same feeling a few years ago when I was travelling – I was sitting in a small coffee shop in Bali when I realised that I had passed the half way point of my trip. It hit me hard then. The party would soon be over. The glass was now more empty than full.
 
   This feeling has been with me in one way or another for most of my adult life. Now, as I sit in my favourite place under this old tree I can feel it again. The days are getting shorter and colder. Soon the trees will be bare. I can’t quite put my finger on it but it feels like the sands of time are running out. There is a hollow feeling in my chest.
@@ -151,15 +146,15 @@ const darkTheme = createTheme({
         </Route>
        
         <Route path="/addblogs">
-          <AddBlogs />
+          <AddBlogs content={content} setContent={setContent}/>
         </Route>
         <Route path="/resources">
           <Resources links={links}/>
         </Route>
 
-        {/* <Route path="/movielist/edit/:id">
-        <EditMovie movies={movies} setMovies={setMovies}/>
-        </Route> */}
+        <Route path="/bloglist/edit/:id">
+        <EditMovie content={content} setContent={setContent}/>
+        </Route>
 
         <Route path="/bloglist/:id">
         <BlogMoreDetails content={content}/>
@@ -220,6 +215,7 @@ function Details({ picture }) {
 }
 
 function Blogs({content}){
+  const history = useHistory();
   return(
     <div>
       <h1 className='blog-title'>Blogs</h1>
@@ -228,15 +224,23 @@ function Blogs({content}){
       heading={heading}
       summary={summary}
       id={index}
+
+      editButton= {<IconButton 
+        style={{marginLeft:"auto"}}
+        aria-label="edit"  color="success"
+       onClick={()=>history.push("/bloglist/edit/" + index)}>
+       <EditIcon />
+     </IconButton>}
       />
       ))}
+     
       <Footer/>
     </div>
   );
 }
 
 
-function Bdetails({picture, heading, summary, id}){
+function Bdetails({picture, heading, summary, id, editButton}){
   const history = useHistory();
   return(
     <div className='blog-display'>
@@ -244,7 +248,8 @@ function Bdetails({picture, heading, summary, id}){
       <img className="blog-pic" src={picture} alt={heading}/>
       <div className='blog-like-icon'>
       <p className='blog-folder-icon'><FolderOpenIcon/> Blog</p>
-      <Like />
+      <div className='blog-folder-icon'><Like />{editButton}</div>
+      
       </div>
       <h2 className='blog-heading'>{heading}</h2>
       <p className='blog-summary'>{summary}</p>
@@ -277,36 +282,81 @@ function BlogMoreDetails({content}){
         );
 }
 
-function AddBlogs(){
-  // const history = useHistory();
+function AddBlogs({content,setContent}){
+  const history = useHistory();
 
-const [pic, setPic] = useState("");
+const [picture, setPicture] = useState("");
 const [heading, setHeading] = useState("");
 const [summary, setSummary] = useState("");
-
-// const addMovie =()=>{
-//   const newMovies= {pic, heading, summary};//shorthand
-//   setMovies([...movies,newMovies]);
-//   history.push("/movielist");
-// };
+const [moredetails, setMoredetails] = useState("");
+const addBlogs =()=>{
+  const newBlogs= {picture, heading, summary, moredetails};//shorthand
+  setContent([...content,newBlogs]);
+  history.push("/bloglist");
+};
   return(
     <div className="add-blogs">
 
-    <TextField value={pic} 
-          onChange={(event)=>setPic(event.target.value)}  label="enter url" variant="filled" />
+    <TextField value={picture} 
+          onChange={(event)=>setPicture(event.target.value)}  label="enter url" variant="filled" />
          
          <TextField value={heading}
           onChange={(event)=>setHeading(event.target.value)} label="enter blog name" variant="filled" />
     
           <TextField value={summary}
           onChange={(event)=>setSummary(event.target.value)}  label="enter blog summary" variant="filled" />
+
+          <TextField value={moredetails}
+          onChange={(event)=>setMoredetails(event.target.value)}  label="enter blog moredetails" variant="filled" />
         
-          <Button  variant="contained">Add Blogs</Button>
+          <Button  onClick={addBlogs} variant="contained">Add Blogs</Button>
          
         </div>
   );
 }
 
+function EditMovie({content,setContent}){
+
+  const history = useHistory();
+  const {id} = useParams();
+  const blogdet = content[id]; 
+  console.log(blogdet);
+
+  const [picture, setPicture] = useState(blogdet.picture);
+  const [heading, setHeading] = useState(blogdet.heading);
+  const [summary, setSummary] = useState(blogdet.summary);
+  const [moredetails, setMoredetails] = useState(blogdet.moredetails);
+
+  const editBlog =()=>{
+    
+    const updatedBlog= {picture, heading, summary, moredetails};//shorthand
+    console.log(updatedBlog);
+    const copyBlogList =[...content];
+    copyBlogList[id] = updatedBlog;
+    setContent(copyBlogList);
+    history.push("/bloglist");
+  };
+
+  return(
+    <div className="add-blogs">
+
+    <TextField value={picture} 
+          onChange={(event)=>setPicture(event.target.value)}  label="enter url" variant="filled" />
+         
+         <TextField value={heading}
+          onChange={(event)=>setHeading(event.target.value)} label="enter blog name" variant="filled" />
+    
+          <TextField value={summary}
+          onChange={(event)=>setSummary(event.target.value)}  label="enter blog summary" variant="filled" />
+
+          <TextField value={moredetails}
+          onChange={(event)=>setMoredetails(event.target.value)}  label="enter blog moredetails" variant="filled" />
+        
+          <Button  onClick={editBlog} variant="contained">Add Blogs</Button>
+         
+        </div>
+  );
+}
 
 function Resources({links}){
   return(
