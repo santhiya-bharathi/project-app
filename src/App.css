@@ -209,3 +209,40 @@ gap: 5px;
   font-size: large;
   padding: 20px;
 }
+
+.login-page{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-content: space-around;
+  align-items: stretch;
+  gap: 10px;
+}
+.login-head{
+  font-family: -webkit-pictograph ;
+  letter-spacing: 1px;
+  margin-top: 100px;
+}
+.please{
+  font-family: -webkit-pictograph ;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+.icons{
+  display: flex;
+  flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+.success{
+  object-fit: cover;
+  height: 250px;
+  width: 250px;
+ border-radius: 60%;
+}
+.failed{
+  object-fit: cover;
+  height: 200px;
+  width: 200px;
+ border-radius: 60%;
+}
