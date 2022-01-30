@@ -18,6 +18,9 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import IconButton from '@mui/material/IconButton';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import EditIcon from '@mui/icons-material/Edit';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
 
 const API_URL = "https://capstone-project-node.herokuapp.com";
 
@@ -235,13 +238,26 @@ function BlogMoreDetails(){
 function AddBlogs(){
   const history = useHistory();
 
-const [picture, setPicture] = useState("");
-const [heading, setHeading] = useState("");
-const [summary, setSummary] = useState("");
-const [moredetails, setMoredetails] = useState("");
+const formvalidationschema = yup.object({
+  picture: yup.string().required("why not fill this picture?").min(4),
+  heading: yup.string().required("why not fill this blog heading?").min(1),
+  summary: yup.string().required("why not fill this summary?").min(5),
+  moredetails: yup.string().required("why not fill this more details?").min(5),
+});
 
-const addBlogs =()=>{
-  const newBlogs= {picture, heading, summary, moredetails};//shorthand
+const {handleSubmit, values, handleChange, handleBlur, errors, touched} = useFormik({
+  initialValues: { heading: "",  picture:"", summary:"", moredetails:""},
+  
+  validationSchema: formvalidationschema,
+
+  onSubmit: (newBlogs) => {
+    console.log("onsubmit", newBlogs);
+    addBlogs(newBlogs);
+  }
+});
+
+const addBlogs =(newBlogs)=>{
+ 
   console.log(newBlogs)
     fetch(`${API_URL}/bloglist`, {
       method:"POST",
@@ -256,23 +272,51 @@ const addBlogs =()=>{
 //   history.push("/bloglist");
 // };
   return(
-    <div className="add-blogs">
-
-    <TextField value={picture} 
-          onChange={(event)=>setPicture(event.target.value)}  label="enter url" variant="filled" />
-         
-         <TextField value={heading}
-          onChange={(event)=>setHeading(event.target.value)} label="enter blog name" variant="filled" />
     
-          <TextField value={summary}
-          onChange={(event)=>setSummary(event.target.value)}  label="enter blog summary" variant="filled" />
-
-          <TextField value={moredetails}
-          onChange={(event)=>setMoredetails(event.target.value)}  label="enter blog moredetails" variant="filled" />
-        
-          <Button  onClick={addBlogs} variant="contained">Add Blogs</Button>
+<form onSubmit={handleSubmit} className="add-blogs">
          
-        </div>
+          <TextField id="picture" 
+      name="picture" 
+      value = {values.picture} 
+      onChange={handleChange} 
+      onBlur={handleBlur}
+       label="enter movie url" 
+       error={errors.picture && touched.picture}
+       helperText={errors.picture && touched.picture && errors.picture}
+       variant="filled" />
+       
+     
+     <TextField id="heading" 
+      name="heading" 
+      value = {values.heading} 
+      onChange={handleChange} 
+      onBlur={handleBlur}
+      label="enter movie name"
+      error={errors.heading && touched.heading}
+      helperText={errors.heading && touched.heading && errors.heading}
+       variant="filled" />
+      
+
+      <TextField id="summary" 
+      name="summary" 
+      value = {values.summary} 
+      onChange={handleChange} 
+      onBlur={handleBlur}  label="enter movie summary" 
+      error= {errors.summary && touched.summary}
+      helperText= {errors.summary && touched.summary && errors.summary}
+      variant="filled" />
+     
+      <TextField id="moredetails" 
+      name="moredetails" 
+      value = {values.moredetails} 
+      onChange={handleChange} 
+      onBlur={handleBlur}  label="enter movie trailer"
+      error=  {errors.moredetails && touched.moredetails}
+      helperText= {errors.moredetails && touched.moredetails && errors.moredetails}
+      variant="filled" />
+     
+      <Button type="submit" variant="contained">Add Blogs</Button>
+        </form>
   );
 }
 
@@ -293,14 +337,26 @@ function UpdateBlog({blogdet}){
 
   const history = useHistory();
 
-  const [picture, setPicture] = useState(blogdet.picture);
-  const [heading, setHeading] = useState(blogdet.heading);
-  const [summary, setSummary] = useState(blogdet.summary);
-  const [moredetails, setMoredetails] = useState(blogdet.moredetails);
+  const formvalidationschema = yup.object({
+    picture: yup.string().required("why not fill this picture?").min(4),
+    heading: yup.string().required("why not fill this blog heading?").min(1),
+    summary: yup.string().required("why not fill this summary?").min(5),
+    moredetails: yup.string().required("why not fill this more details?").min(5),
+  });
+ 
+  const {handleSubmit, values, handleChange, handleBlur, errors, touched} = useFormik({
+    initialValues: { heading: blogdet.heading, picture:blogdet.picture, summary:blogdet.summary, moredetails:blogdet.moredetails},
+   
+    validationSchema: formvalidationschema,
+  
+    onSubmit: (updatedBlog) => {
+      console.log("onsubmit", updatedBlog);
+      editBlog(updatedBlog);
+    }
+  });
 
-  const editBlog =()=>{
+  const editBlog =(updatedBlog)=>{
     
-    const updatedBlog= {picture, heading, summary, moredetails};//shorthand
     console.log(updatedBlog);
     // const copyBlogList =[...content];
     // copyBlogList[id] = updatedBlog;
@@ -314,23 +370,51 @@ function UpdateBlog({blogdet}){
   };
 
   return(
-    <div className="add-blogs">
-
-    <TextField value={picture} 
-          onChange={(event)=>setPicture(event.target.value)}  label="enter url" variant="filled" />
+    <form onSubmit={handleSubmit} className="add-blogs">
          
-         <TextField value={heading}
-          onChange={(event)=>setHeading(event.target.value)} label="enter blog name" variant="filled" />
-    
-          <TextField value={summary}
-          onChange={(event)=>setSummary(event.target.value)}  label="enter blog summary" variant="filled" />
+          <TextField id="picture" 
+      name="picture" 
+      value = {values.picture} 
+      onChange={handleChange} 
+      onBlur={handleBlur}
+       label="enter movie url" 
+       error={errors.picture && touched.picture}
+       helperText={errors.picture && touched.picture && errors.picture}
+       variant="filled" />
+       
+     
+     <TextField id="heading" 
+      name="heading" 
+      value = {values.heading} 
+      onChange={handleChange} 
+      onBlur={handleBlur}
+      label="enter movie name"
+      error={errors.heading && touched.heading}
+      helperText={errors.heading && touched.heading && errors.heading}
+       variant="filled" />
+      
 
-          <TextField value={moredetails}
-          onChange={(event)=>setMoredetails(event.target.value)}  label="enter blog moredetails" variant="filled" />
+      <TextField id="summary" 
+      name="summary" 
+      value = {values.summary} 
+      onChange={handleChange} 
+      onBlur={handleBlur}  label="enter movie summary" 
+      error= {errors.summary && touched.summary}
+      helperText= {errors.summary && touched.summary && errors.summary}
+      variant="filled" />
+     
+      <TextField id="moredetails" 
+      name="moredetails" 
+      value = {values.moredetails} 
+      onChange={handleChange} 
+      onBlur={handleBlur}  label="enter movie trailer"
+      error=  {errors.moredetails && touched.moredetails}
+      helperText= {errors.moredetails && touched.moredetails && errors.moredetails}
+      variant="filled" />
+     
+      <Button type="submit" variant="contained">Edit Blogs</Button>
+        </form>   
         
-          <Button  onClick={editBlog} variant="contained">Edit Blogs</Button>
-         
-        </div>
   );
 }
 
