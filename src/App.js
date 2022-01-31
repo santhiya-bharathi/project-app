@@ -28,18 +28,7 @@ const API_URL = "https://capstone-project-node.herokuapp.com";
 
 function App() {
 
-
-const links = [{link:"http://www.huffingtonpost.com/entry/this-is-your-brain-on-nature_us_55bf98fee4b0b23e3ce35d99"},
-{link:"http://ngm.nationalgeographic.com/2016/01/call-to-wild-text"},
-{link:"https://www.youtube.com/watch?v=BiXrRK-yrfA"},
-{link:"http://uk.businessinsider.com/scientific-benefits-of-nature-outdoors-2016-4?r=US&IR=T/#3-stress-relief-3"},
-{link:"http://www.nytimes.com/2010/07/06/health/06real.html"},
-{link:"http://www.davidsuzuki.org/media/news/2013/07/report-confirms-daily-dose-of-nature-boosts-happiness-wellbeing/"},
-{link:"http://health.usnews.com/health-news/family-health/heart/articles/2008/06/23/time-in-the-sun-how-much-is-needed-for-vitamin-d"},
-{link:"http://www.mnn.com/health/fitness-well-being/stories/study-nature-inspires-more-creative-minds"},
-{link:"http://www.rochester.edu/news/show.php?id=3639"},
-{link:"http://www.dec.ny.gov/lands/90720.html"},
-]
+const [links, setLinks] = useState([]);
 const [content, setContent] = useState([]);
   const history = useHistory();
   const [mode, setMode] = useState("dark");
@@ -53,6 +42,12 @@ useEffect(()=>{
   fetch(`${API_URL}/bloglist`, {method:"GET"})
   .then((data)=>data.json())
   .then((blg)=>setContent(blg));
+}, []);
+console.log(links);
+useEffect(()=>{
+  fetch(`${API_URL}/links`, {method:"GET"})
+  .then((data)=>data.json())
+  .then((lnk)=>setLinks(lnk));
 }, []);
   return (
     <ThemeProvider theme={darkTheme}>
@@ -85,7 +80,7 @@ useEffect(()=>{
           <AddBlogs />
         </Route>
         <Route path="/resources">
-          <Resources links={links}/>
+          <Resources />
         </Route>
 
         <Route path="/bloglist/edit/:id">
@@ -174,18 +169,24 @@ function Details({ picture }) {
   );
 }
 
+function Header(){
+  return(
+    <div className='header-design'></div>
+  );
+}
+
 function Blogs(){
 
   const [content, setContent] = useState([]);
 
-  const getMovies = () => {
+  const getBlog = () => {
     fetch(`${API_URL}/bloglist`, {method:"GET"})
     .then((data)=>data.json())
     .then((blg)=>setContent(blg));
   };
   
   
-  useEffect(getMovies, []);
+  useEffect(getBlog, []);
   const history = useHistory();
   return(
     <div>
@@ -447,7 +448,17 @@ function UpdateBlog({blogdet}){
   );
 }
 
-function Resources({links}){
+function Resources(){
+  const [links, setLinks] = useState([]);
+
+  const getLinks = () => {
+    fetch(`${API_URL}/links`, {method:"GET"})
+    .then((data)=>data.json())
+    .then((lnk)=>setLinks(lnk));
+  };
+  
+  
+  useEffect(getLinks, []);
   return(
     <div>
         <h2 className='reso-head'>Resources</h2>
@@ -482,14 +493,6 @@ function NotFound(){
     </div>
   );
 }
-
-function Header(){
-  return(
-    <div className='header-design'></div>
-  );
-}
-
-
 
 function Footer(){
   return(
@@ -701,4 +704,16 @@ function SignupFailed(){
 //   Once you have ‘perceived’ it, then open fully to ‘receiving’ it – open to the experience as if you were taking it in to your mind and body, savouring and enjoying the details, the nuances, and the flavours of experience.
 //   It starts with intention – deliberately guiding your attention towards a particular object; then perception – attending to what you are perceiving. Then we can experiment with simply opening and surrendering to the experience; to really allow the experience to nourish you, you can imagine the experience flowing into you, as you simply open and receive the goodness that you perceive.`,heading:"Nature Connection Exercise - Perceive and Receive", summary:"For this exercise find a place, any place, with some nature present (which, let’s face it, is anywhere and everywhere; the air you are breathing right now, even the body with which you perceive the world is part of 'nature'). In this practice, we begin by honing our powers of perception. Imagine you have just…"},
 //   {picture:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkAypk-aiH7Zbts8sgU_Or78Sa1uPpkitVP3t10SVmbYDoZ0j89cga9HtAEUO-NvvblBY&usqp=CAU", moredetails:`I am sitting on my balcony. It is spring and there is a little bit of heat in the sun. The balcony looks out over a road. The road is usually busy… an endless stream of trucks and cars but right now there is no traffic. Everyone is self-isolating. The machine has stopped. It feels strange. Peaceful. I can hear different birds… the wren, the blackbird, the robin. A blue tit is flitting from one branch to the next. Life goes on. I could sit here all day.“Don’t try”. Those are the two simple words of advice offered by the poet Charles Bukowski.It jars for most people to receive that advice… especially those of us who want a better world.I have been stuck in a cycle of “trying” for a while now and I see a lot of it in the worldTrying and searching and wanting.Everywhere I look people, including me, are rushing to the next moment.I know that 99% of people probably won’t resonate with what I’m going to say. They might think that I’m an idiot and that this piece is a cop out.Not trying is seen as the “worst”.It means that you are lazy and you don’t care.It means that you settle.It means that you do nothing.It means that you are part of the problem.It means that you are helpless.Is that really true?I don’t think so.Does the oak tree try?No. It just is.Does the oak tree do nothing?No. It just is.Why is it that we humans are always trying and searching and wanting?Don’t rush. Close your eyes and sit with that question for a moment.`,heading:"Trying and searching and wanting", summary:"I am sitting on my balcony. It is spring and there is a little bit of heat in the sun. The balcony looks out over a road. The road is usually busy… an endless stream of trucks and cars but right now there is no traffic. Everyone is self-isolating. The machine has stopped. It feels…"}
+// ]
+
+// const links = [{link:"http://www.huffingtonpost.com/entry/this-is-your-brain-on-nature_us_55bf98fee4b0b23e3ce35d99"},
+// {link:"http://ngm.nationalgeographic.com/2016/01/call-to-wild-text"},
+// {link:"https://www.youtube.com/watch?v=BiXrRK-yrfA"},
+// {link:"http://uk.businessinsider.com/scientific-benefits-of-nature-outdoors-2016-4?r=US&IR=T/#3-stress-relief-3"},
+// {link:"http://www.nytimes.com/2010/07/06/health/06real.html"},
+// {link:"http://www.davidsuzuki.org/media/news/2013/07/report-confirms-daily-dose-of-nature-boosts-happiness-wellbeing/"},
+// {link:"http://health.usnews.com/health-news/family-health/heart/articles/2008/06/23/time-in-the-sun-how-much-is-needed-for-vitamin-d"},
+// {link:"http://www.mnn.com/health/fitness-well-being/stories/study-nature-inspires-more-creative-minds"},
+// {link:"http://www.rochester.edu/news/show.php?id=3639"},
+// {link:"http://www.dec.ny.gov/lands/90720.html"},
 // ]
